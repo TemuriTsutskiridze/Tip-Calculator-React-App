@@ -13,7 +13,7 @@ function App() {
       <GlobalStyles />
       <Logo src= { LogoImage } alt='SPLITTER logo' />
       <Board>
-        <div>
+        <InputContainer>
           <InputDiv margin_top = { "0rem" }>
             <InputDivInfo>
               <InputName>Bill</InputName>
@@ -39,7 +39,7 @@ function App() {
             </InputDivInfo>
             <Input type = "number" placeholder='0' placeholderImage = { PersonIcon }/>
           </InputDiv>
-        </div>
+        </InputContainer>
 
 
         <OutPutDiv>
@@ -72,6 +72,10 @@ const Logo = styled.img`
   margin-top: 5rem;
   width: 8.7rem;
   height: 5.3rem;
+
+  @media (min-width: 90em) {
+    margin-top: 16.3rem;
+  }
 `
 
 const Board = styled.div`
@@ -84,9 +88,23 @@ const Board = styled.div`
   display: flex;
   flex-direction: column;
   gap: 3.2rem;
+
+  @media (min-width: 90em) {
+    width: 92rem;
+    margin-top: 8.8rem;
+    flex-direction: row;
+    gap: 4.8rem;
+    border-radius: 25px;
+  }
 `
 
 
+
+const InputContainer = styled.div`
+  @media (min-width: 90em) {
+   width: 37.9rem;
+  }
+`
 
 interface IInputDivProps {
   margin_top: string
@@ -176,6 +194,11 @@ const TipBox = styled.div`
   grid-template-rows: repeat(4, 4.8rem);
   gap: 1.6rem;
   margin-top: 3.2rem;
+
+  @media (min-width: 90em) {
+    grid-template-columns: 11.7rem 11.7rem 11.7rem;
+    grid-template-rows: repeat(3, 4.8rem);
+  }
 `
 
 const TipBoxName = styled(InputName)`
@@ -183,6 +206,10 @@ const TipBoxName = styled(InputName)`
   line-height: 1.5em;
   align-self: center;
   grid-column: 1/ 3;
+
+  @media (min-width: 90em) {
+    grid-column: 1/ 4;
+  }
 `
 
 const TipButton = styled.button`
@@ -232,6 +259,11 @@ const OutPutDiv = styled.div`
   background-color: var(--green-bold);
   border-radius: 15px;
   padding: 3.7rem 2.4rem 2.4rem;
+
+  @media (min-width: 90em) {
+    width: 100%;
+    padding: 5.6rem 4rem 4rem;
+  }
 `
 
 
@@ -266,13 +298,17 @@ const Price = styled.p`
   font-size: 3.2rem;
   line-height: 1.5em;
   color: var(--green-semi-bold);
+
+  @media (min-width: 90em) {
+    font-size: 4.8rem;
+  }
 `
 
 const Reset = styled.button`
   width: 100%;
   padding: 0.45em 0;
   border: none;
-  background: var(--green-semi-bold);
+  background: #0D686D;
   border-radius: 5px;
   font-size: 2rem;
   line-height: 1.5em;
@@ -283,6 +319,10 @@ const Reset = styled.button`
 
   &:hover {
     background: #9FE8DF;
+  }
+
+  @media (min-width: 90em) {
+    margin-top:8rem;
   }
 `
 

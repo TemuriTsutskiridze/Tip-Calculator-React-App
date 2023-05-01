@@ -83,10 +83,4 @@ export const GlobalStyles = createGlobalStyle`
         align-items: center;
         min-height: inherit;
     }
-
-    @media (min-width: 90em) {
-        body {
-            padding-bottom: 23.9rem;
-        }
-    }
 `
