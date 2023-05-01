@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components'
-import { GlobalStyleComponent } from 'styled-components'
+import { useState } from 'react'
+// import { GlobalStyleComponent } from 'styled-components'
 import { GlobalStyles } from './components/Globals'
 
 import LogoImage from './assets/logo.svg'
@@ -8,6 +9,15 @@ import PersonIcon from './assets/icon-person.svg'
 
 
 function App() {
+
+  const [bill, setBill] = useState<number>(0);
+  const [people, setPeople] = useState<number>(0);
+  const [tip, setTip] = useState<number>(0);
+
+  const tip_amount: number = (bill * tip / 100) / people;
+  console.log("tip" + tip_amount);
+  // const total: number = (bill + (bill * tip / 100)) / people;
+
   return (
     <>
       <GlobalStyles />
@@ -19,17 +29,37 @@ function App() {
               <InputName>Bill</InputName>
               <Error>Can’t be zero</Error>
             </InputDivInfo>
-            <Input type = "number" placeholder='0' placeholderImage = { DollarIcon }/>
+            <Input 
+              type = "number" 
+              placeholder='0' 
+              placeholderImage = { DollarIcon } 
+              onInput={(event) => {
+                setBill(event.currentTarget.valueAsNumber);
+                console.log(bill);
+              }}/>
           </InputDiv>
 
           <TipBox>
             <TipBoxName>Select Tip %</TipBoxName>
             {["5%", "10%", "15%", "25%", "50%"].map(tip => {
               return (
-                <TipButton key = { tip }>{ tip }</TipButton>
+                <TipButton 
+                  key = { tip } 
+                  value = { parseInt(tip) } 
+                  onClick={() => {
+                    setTip(parseInt(tip));
+                  }}>
+                    { tip }
+                </TipButton>
               )
             })}
-            <CustomInput type = "number" placeholder='Custom'/>
+            <CustomInput 
+              type = "number" 
+              placeholder='Custom' 
+              onInput={(event) => {
+                setTip(event.currentTarget.valueAsNumber);
+                console.log(tip);
+              }}/>
           </TipBox>
 
           <InputDiv margin_top = { "3.2rem" }>
@@ -37,7 +67,14 @@ function App() {
               <InputName>Number of People</InputName>
               <Error>Can’t be zero</Error>
             </InputDivInfo>
-            <Input type = "number" placeholder='0' placeholderImage = { PersonIcon }/>
+            <Input 
+              type = "number" 
+              placeholder='0' 
+              placeholderImage = { PersonIcon } 
+              onInput={(event) => {
+                setPeople(event.currentTarget.valueAsNumber);
+                console.log(people);
+              }}/>
           </InputDiv>
         </InputContainer>
 
@@ -48,7 +85,7 @@ function App() {
               Tip Amount
               <SectionInfoSpan>/ person</SectionInfoSpan>
             </SectionInfo>
-            <Price>$4.27</Price>
+            <Price> { `$${tip_amount.toFixed(2)}` } </Price>
           </Section>
 
           <Section margin_top = { "2.5rem" }>
@@ -259,6 +296,7 @@ const OutPutDiv = styled.div`
   background-color: var(--green-bold);
   border-radius: 15px;
   padding: 3.7rem 2.4rem 2.4rem;
+  overflow: auto;
 
   @media (min-width: 90em) {
     width: 100%;
