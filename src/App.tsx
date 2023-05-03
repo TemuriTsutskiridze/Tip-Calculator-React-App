@@ -1,22 +1,24 @@
 import styled, { css } from 'styled-components'
 import { useState } from 'react'
-// import { GlobalStyleComponent } from 'styled-components'
 import { GlobalStyles } from './components/Globals'
-
 import LogoImage from './assets/logo.svg'
 import DollarIcon from './assets/icon-dollar.svg'
 import PersonIcon from './assets/icon-person.svg'
 
 
 function App() {
-
   const [bill, setBill] = useState<number>(0);
   const [people, setPeople] = useState<number>(0);
   const [tip, setTip] = useState<number>(0);
 
   const tip_amount: number = (bill * tip / 100) / people;
-  console.log("tip" + tip_amount);
-  // const total: number = (bill + (bill * tip / 100)) / people;
+  const total: number = (bill + (bill * tip / 100)) / people;
+
+  const handleReset = () => {
+    setBill(0);
+    setPeople(0);
+    setTip(0);
+  }
 
   return (
     <>
@@ -27,12 +29,16 @@ function App() {
           <InputDiv margin_top = { "0rem" }>
             <InputDivInfo>
               <InputName>Bill</InputName>
-              <Error>Can’t be zero</Error>
+              <Error bill = { bill } people = { people } inputName = "bill">Can’t be zero</Error>
             </InputDivInfo>
             <Input 
               type = "number" 
               placeholder='0' 
               placeholderImage = { DollarIcon } 
+              bill = { bill }
+              people = { people }
+              inputName = { "bill" }
+              value = { bill }
               onInput={(event) => {
                 setBill(event.currentTarget.valueAsNumber);
                 console.log(bill);
@@ -56,6 +62,7 @@ function App() {
             <CustomInput 
               type = "number" 
               placeholder='Custom' 
+              value = { tip }
               onInput={(event) => {
                 setTip(event.currentTarget.valueAsNumber);
                 console.log(tip);
@@ -65,12 +72,16 @@ function App() {
           <InputDiv margin_top = { "3.2rem" }>
             <InputDivInfo>
               <InputName>Number of People</InputName>
-              <Error>Can’t be zero</Error>
+              <Error bill = { bill } people = { people } inputName = "people">Can’t be zero</Error>
             </InputDivInfo>
             <Input 
               type = "number" 
               placeholder='0' 
               placeholderImage = { PersonIcon } 
+              bill = { bill }
+              people = { people }
+              inputName = { "people" }
+              value = { people }
               onInput={(event) => {
                 setPeople(event.currentTarget.valueAsNumber);
                 console.log(people);
@@ -85,7 +96,7 @@ function App() {
               Tip Amount
               <SectionInfoSpan>/ person</SectionInfoSpan>
             </SectionInfo>
-            <Price> { `$${tip_amount.toFixed(2)}` } </Price>
+            <Price> { !isNaN(Number(tip_amount.toFixed(2))) && Number.isFinite(Number(tip_amount.toFixed(2))) ? `$${tip_amount.toFixed(2)}` : "$0.00" } </Price>
           </Section>
 
           <Section margin_top = { "2.5rem" }>
@@ -93,10 +104,10 @@ function App() {
               Tip Amount
               <SectionInfoSpan>/ person</SectionInfoSpan>
             </SectionInfo>
-            <Price>$32.79</Price>
+            <Price>{ !isNaN(Number(total.toFixed(2))) && Number.isFinite(Number(total.toFixed(2))) ? `$${total.toFixed(2)}` : "$0.00" }</Price>
           </Section>
 
-          <Reset>RESET</Reset>
+          <Reset onClick = { handleReset } >RESET</Reset>
         </OutPutDiv>
         
       </Board>
@@ -172,14 +183,25 @@ const InputName = styled.p`
 `
 
 
-const Error = styled.p`
-  color: var(--red);
-  opacity: 0;
+interface IErrorProp {
+  bill: number,
+  people: number,
+  inputName: "bill" | "people"
+}
+
+const Error = styled.p<IErrorProp>`
+  ${props => css`
+    color: var(--red);
+    opacity: ${props[props.inputName] <= 0 || (props.inputName === "people" && props.people % 1 !== 0)? "1": "0"};
+  `}
 `
 
 
 interface IInputPlaceholderImage {
   placeholderImage: string
+  bill: number,
+  people: number,
+  inputName: "bill" | "people"
 }
 
 const Input = styled.input<IInputPlaceholderImage>`
@@ -196,6 +218,7 @@ const Input = styled.input<IInputPlaceholderImage>`
     text-align: right;
     color: var(--green-bold);
     caret-color: var(--green-semi-bold);
+    outline: 20px solid ${ props[props.inputName] <= 0 || (props.inputName === "people" && props.people % 1 !== 0) ? "red": "green" }
     cursor: pointer;
 
     &::-webkit-inner-spin-button,
@@ -279,6 +302,7 @@ const CustomInput = styled.input`
   cursor: pointer;
   text-align: right;
   padding-right: 1.5rem; 
+  color: var(--green-bold);
   caret-color: var(--green-semi-bold);
 
   &::-webkit-inner-spin-button,
